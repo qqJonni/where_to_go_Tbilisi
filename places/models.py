@@ -42,3 +42,21 @@ class PlaceImage(models.Model):
     @property
     def get_absolute_image_url(self):
         return '{0}{1}'.format(settings.MEDIA_URL, self.picture.url)
+
+
+class TourGuide(models.Model):
+    first_name = models.CharField(max_length=50, verbose_name='Имя')
+    last_name = models.CharField(max_length=50, verbose_name='Фамилия')
+    middle_name = models.CharField(max_length=50, verbose_name='Отчество', blank=True)
+    tour_name = models.CharField(max_length=128, verbose_name='Название экскурсии')
+    description = models.TextField(verbose_name='Описание тура')
+    cost = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Стоимость экскурсии')
+
+    places = models.ManyToManyField('PlaceName', verbose_name='Места', related_name='tour_guides')
+
+    class Meta:
+        verbose_name = 'Экскурсовод'
+        verbose_name_plural = 'Экскурсоводы'
+
+    def __str__(self):
+        return f'{self.first_name} {self.last_name} - {self.tour_name}'

@@ -1,7 +1,8 @@
 from django.contrib import admin
 from adminsortable2.admin import SortableAdminBase, SortableInlineAdminMixin
-
-from places.models import PlaceName, PlaceImage
+from django.contrib.admin.widgets import FilteredSelectMultiple
+from places.models import PlaceName, PlaceImage, TourGuide
+from django.db import models
 
 
 class PicsInline(SortableInlineAdminMixin, admin.TabularInline):
@@ -32,3 +33,14 @@ class PicAdmin(admin.ModelAdmin):
 
     show_photo_preview.short_description = 'Photo Preview'
     show_photo_preview.allow_tags = True
+
+
+class TourGuideAdmin(admin.ModelAdmin):
+    list_display = ('first_name', 'last_name', 'tour_name', 'cost', 'description')
+
+    formfield_overrides = {
+        models.ManyToManyField: {'widget': FilteredSelectMultiple('Места', is_stacked=False)}
+    }
+
+
+admin.site.register(TourGuide, TourGuideAdmin)
